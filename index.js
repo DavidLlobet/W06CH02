@@ -46,20 +46,27 @@ const errorMessage = `<!DOCTYPE html>
 
 server.on("request", (request, response) => {
   const myUrl = new URL(request.url, `http://${request.headers.host}`);
-  const myUrlValues = myUrl.searchParams.values();
-  const numberValues = [];
   response.setHeader("Content-Type", "text/html");
-  response.statusCode = 200;
 
-  for (const value of myUrlValues) {
-    numberValues.push(+value);
-  }
-  console.log(numberValues);
-  if (Number.isNaN(numberValues[0]) || Number.isNaN(numberValues[1])) {
-    response.write(errorMessage);
+  if (myUrl.pathname !== "/calculator") {
+    response.statusCode = 404;
+
+    response.write("<h1>404</>");
     response.end();
   } else {
-    response.write(htmlCalculator(numberValues[0], numberValues[1]));
-    process.exit(9);
+    const myUrlValues = myUrl.searchParams.values();
+    const numberValues = [];
+    response.statusCode = 200;
+
+    for (const value of myUrlValues) {
+      numberValues.push(+value);
+    }
+    console.log(numberValues);
+    if (Number.isNaN(numberValues[0]) || Number.isNaN(numberValues[1])) {
+      response.write(errorMessage);
+      response.end();
+    } else {
+      response.write(htmlCalculator(numberValues[0], numberValues[1]));
+    }
   }
 });
