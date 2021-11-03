@@ -16,6 +16,8 @@
     "nodemon": "^2.0.14"
   },
   "dependencies": {
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "prompt": "^1.2.0",
+    "prompt-sync": "^4.2.0"
   }
 }
