@@ -110,3 +110,5 @@ node_modules
 #sonarscanner
 .scannerwork
 sonar-project.properties
+
+exercise.js
