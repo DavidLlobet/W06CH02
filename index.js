@@ -74,6 +74,7 @@ server.on("request", (request, response) => {
       response.end();
     } else {
       response.write(htmlCalculator(numberValues[0], numberValues[1]));
+      response.end();
     }
   }
 });
