@@ -31,15 +31,35 @@ const htmlCalculator = (num1, num2) => `<!DOCTYPE html>
   </body>
 </html>`;
 
+const errorMessage = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+     <p>ERROR</p>
+  </body>
+</html>`;
+
 server.on("request", (request, response) => {
   const myUrl = new URL(request.url, `http://${request.headers.host}`);
   const myUrlValues = myUrl.searchParams.values();
   const numberValues = [];
+  response.setHeader("Content-Type", "text/html");
+  response.statusCode = 200;
+
   for (const value of myUrlValues) {
     numberValues.push(+value);
   }
-  response.setHeader("Content-Type", "text/html");
-  response.statusCode = 200;
-  response.write(htmlCalculator(numberValues[0], numberValues[1]));
-  response.end();
+  console.log(numberValues);
+  if (Number.isNaN(numberValues[0]) || Number.isNaN(numberValues[1])) {
+    response.write(errorMessage);
+    response.end();
+  } else {
+    response.write(htmlCalculator(numberValues[0], numberValues[1]));
+    process.exit(9);
+  }
 });
