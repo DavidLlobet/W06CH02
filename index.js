@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { program } = require("commander");
 
 const http = require("http");
 
@@ -6,11 +7,17 @@ const { sum, subtraction, multi, divi } = require("./operators");
 
 const server = http.createServer();
 
-const port = process.env.SERVER_PORT_CALCULATOR || 5000;
+program.option("-p, --port <port>");
+program.parse(process.argv);
 
-server.listen(port, () => {
-  console.log(`Escuchando en el puerto ${port}`);
-});
+let port;
+if (program.opts().port && !Number.isNaN(program.opts().port)) {
+  port = program.opts().port;
+} else {
+  port = process.env.SERVER_PORT_CALCULATOR || 5000;
+}
+
+server.listen(port, () => {});
 
 const htmlCalculator = (num1, num2) => `<!DOCTYPE html>
 <html lang="en">
@@ -67,6 +74,7 @@ server.on("request", (request, response) => {
       response.end();
     } else {
       response.write(htmlCalculator(numberValues[0], numberValues[1]));
+      response.end();
     }
   }
 });
